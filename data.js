@@ -56,7 +56,8 @@ var T = {
     r_balcony:"Балкон (май–сент)", r_wc_staff:"WC персонала", r_laundry:"Прачечная",
     r_staff_dressing:"Раздевалка персонала", r_basement:"Подвал",
     r_room:"Комната", r_rooms_all:"Комнаты жильцов",
-    t_trash:"Мусор", t_sinks:"Раковины и краны", p_drains_skirting:"Сливы и плинтусы" t_doors:"Двери, выключатели",
+    t_trash:"Мусор", t_doors:"Двери, выключатели",
+    t_sinks:"Раковины и краны", p_drains_skirting:"Сливы и плинтусы",
     t_windowsills:"Подоконники", t_surfaces:"Свободные поверхности",
     t_cabinets:"Шкафы", t_tables:"Столы", t_tabletops:"Столешницы и ножки (тщательно)",
     t_chairs:"Стулья", t_chairs_s:"Стулья и диваны",
@@ -144,6 +145,7 @@ var T = {
     r_staff_dressing:"Staff changing", r_basement:"Basement",
     r_room:"Room", r_rooms_all:"Resident rooms",
     t_trash:"Trash", t_doors:"Doors, switches",
+    t_sinks:"Sinks and taps", p_drains_skirting:"Drains and skirting",
     t_windowsills:"Windowsills", t_surfaces:"Free surfaces",
     t_cabinets:"Cabinets", t_tables:"Tables", t_tabletops:"Tabletops and legs (thorough)",
     t_chairs:"Chairs", t_chairs_s:"Chairs and sofas",
@@ -231,6 +233,7 @@ var T = {
     r_staff_dressing:"Henkilökunnan pukuhuone", r_basement:"Kellari",
     r_room:"Huone", r_rooms_all:"Asukashuoneet",
     t_trash:"Roskat", t_doors:"Ovet, kytkimet",
+    t_sinks:"Pesualtaat ja hanat", p_drains_skirting:"Viemärit ja jalkalistat",
     t_windowsills:"Ikkunalaudat", t_surfaces:"Vapaat pinnat",
     t_cabinets:"Kaapit", t_tables:"Pöydät", t_tabletops:"Pöytätasot ja jalat (perusteellisesti)",
     t_chairs:"Tuolit", t_chairs_s:"Tuolit ja sohvat",
@@ -266,8 +269,6 @@ var T = {
   }
 };
 
-// Комнаты. Формат задачи: [ключ, маска "11111" по дням, минуты]
-// Если нужно убрать комнату — поставьте перед id префикс _ (или удалите объект из ROUTE)
 var ROOMS = [
   {id:"office", c:"#7b5ea7", n:"r_office", t:[
     ["t_trash","00100",1],["t_doors","00100",2],["t_tables","00100",3],
@@ -330,17 +331,11 @@ var ROOMS = [
   {id:"staff_dressing", c:"#6d4c41", n:"r_staff_dressing", t:[
     ["t_surfaces","00100",2],["t_doors","00100",2],["t_cabinet_doors","00100",3],
     ["t_floor","00100",4],["t_skirting","00100",3],["t_trash","00001",1]
-  ]},
-  {id:"basement", c:"#546e7a", n:"r_basement", t:[
-    ["t_trash","00001",1],["t_doors","00001",2],["t_floor","00001",4]
   ]}
 ];
 
-// Порядок обхода (от чистого к грязному)
-var ROUTE = ["office","recreation","gym","corridor","dining","kitchen","laundry","staff_dressing","sauna","sauna_shower","sauna_dressing","balcony","basement","entrance","wc_staff","rooms"];
+var ROUTE = ["office","recreation","gym","corridor","dining","kitchen","laundry","staff_dressing","sauna","sauna_shower","sauna_dressing","balcony","entrance","wc_staff","rooms"];
 
-// Периодические задачи (привязаны к комнате через rid)
-// perDue: срабатывает в нужный день недели (wd) и не чаще раз в days дней
 var PERIODS = [
   {id:"p1", rid:"entrance", k:"p_skirting_th", days:30, wd:3, m:4},
   {id:"p2", rid:"corridor", k:"p_skirting", days:30, wd:4, m:4},
@@ -361,7 +356,6 @@ var PERIODS = [
   {id:"p17", rid:"laundry", k:"p_drains_skirting", days:30, wd:3, m:6}
 ];
 
-// Список «раз в месяц» (справочный)
 var MONTHLY = [
   ["m_kitchen_walls","m_when_monthly2"],
   ["m_kitchen_drain","m_when_monthly"],
@@ -375,8 +369,6 @@ var MONTHLY = [
   ["m_ceilings","m_when_halfyear"]
 ];
 
-// Шаблон задачи для комнаты жильца (генерируется для каждого номера)
-// [ключ, минуты, {rag, opts}]
 var ROOM_BASIC = [
   ["t_surfaces",3],["t_seats",3],["t_doors",2],["t_windowsills",1],
   ["t_tv",1],["t_floor_under",4]
