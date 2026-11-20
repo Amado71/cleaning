@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Cleaning plan</title>
+<meta name="theme-color" content="#2e7d4f">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="Cleaning">
+<link rel="manifest" href="manifest.json">
+<link rel="icon" type="image/svg+xml" href="icon.svg">
+<link rel="apple-touch-icon" href="icon.svg">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div class="w">
+  <div class="top">
+    <h1 id="h1"></h1>
+    <select id="lang" class="lang" aria-label="Language">
+      <option value="ru">RU</option>
+      <option value="en">EN</option>
+      <option value="fi">FI</option>
+    </select>
+  </div>
+  <div class="tabs" id="tabs"></div>
+  <div id="list"></div>
+  <details class="box">
+    <summary id="sAllRooms"></summary>
+    <p id="allRoomsDesc"></p>
+    <textarea id="allr" rows="3"></textarea>
+    <div class="btns"><button id="spl"></button></div>
+  </details>
+  <details class="box">
+    <summary id="sBackup"></summary>
+    <p id="backupDesc"></p>
+    <textarea id="bk" rows="3"></textarea>
+    <div class="btns"><button id="bcp"></button><button id="bld"></button></div>
+  </details>
+  <details class="box">
+    <summary id="sRags"></summary>
+    <div id="ragsBody"></div>
+  </details>
+  <div class="warn" id="note"></div>
+  <div class="btns">
+    <button id="pd"></button>
+    <button id="pw"></button>
+    <button id="reset"></button>
+  </div>
+</div>
+<div id="pa"></div>
+<script src="data.js"></script>
+<script src="app.js"></script>
+</body>
+</html>
