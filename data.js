@@ -56,7 +56,7 @@ var T = {
     r_balcony:"Балкон (май–сент)", r_wc_staff:"WC персонала", r_laundry:"Прачечная",
     r_staff_dressing:"Раздевалка персонала", r_basement:"Подвал",
     r_room:"Комната", r_rooms_all:"Комнаты жильцов",
-    t_trash:"Мусор", t_doors:"Двери, выключатели",
+    t_trash:"Мусор", t_sinks:"Раковины и краны", p_drains_skirting:"Сливы и плинтусы" t_doors:"Двери, выключатели",
     t_windowsills:"Подоконники", t_surfaces:"Свободные поверхности",
     t_cabinets:"Шкафы", t_tables:"Столы", t_tabletops:"Столешницы и ножки (тщательно)",
     t_chairs:"Стулья", t_chairs_s:"Стулья и диваны",
