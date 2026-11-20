@@ -53,7 +53,6 @@ function dur(m){
 }
 function t0(){ var p = (st.t||"12:00").split(":"); return (+p[0]||0)*60+(+p[1]||0); }
 
-// Определяем порядок (сверху вниз) и цветовые зоны
 function orderOf(k){
   if(/trash/.test(k)) return 0;
   if(/walls|rails/.test(k)) return 1;
@@ -74,7 +73,6 @@ function ragOf(k){
   return "b";
 }
 
-// Собираем остановки на день
 function stops(d){
   var out = [], key = dk(d);
   ROUTE.forEach(function(rid){
@@ -122,7 +120,6 @@ function addRooms(out, d, key){
     var tasks = [];
     ROOM_BASIC.forEach(function(t){ tasks.push({ k:t[0], m:t[1], rag:"b" }); });
     ROOM_BATH.forEach(function(t){ tasks.push({ k:t[0], m:t[1], rag:t[2].rag }); });
-    // Глубокая уборка санузла (раз в 28 дней)
     var drLast = st.dr[n];
     var drDue = !drLast || drLast === key || (new Date(key) - new Date(drLast))/864e5 >= 28;
     if(drDue){
@@ -131,7 +128,6 @@ function addRooms(out, d, key){
       tasks.push({ k:"t_bath_brush", m:5, rag:"r" });
       tasks.push({ k:"t_bath_finish", m:2, rag:"r" });
     }
-    // Лейки и рамы (раз в 88 дней)
     var dlLast = st.dl[n];
     if(!dlLast || dlLast === key || (new Date(key) - new Date(dlLast))/864e5 >= 88){
       tasks.push({ k:"t_shower_heads", m:3, rag:"r", type:"dl", room:n });
@@ -184,7 +180,6 @@ function endStop(){
   return sum({ name:L("endStop"), id:"end", c:"#6b7a70", noRag:1, tasks: ts.map(function(t, i){ return { k:t[0], m:t[1], i:i, rag:"b" }; }) });
 }
 
-// Построение маршрута
 function build(all, start){
   var seq = [], t = start;
   var rooms = all.filter(function(s){ return s.room; });
@@ -197,10 +192,7 @@ function build(all, start){
   var others = all.filter(function(s){
     return s !== kit && s !== wc && s !== dMain && s !== dFloor && s !== rec && !s.emp && !s.room;
   });
-  others.forEach(function(s){
-    if(s.id === "office") s.ms = 0;
-    else s.ms = 0;
-  });
+  others.forEach(function(s){ s.ms = 0; });
 
   var prep = prepStop(all); prep.start = t; seq.push(prep); t += prep.min + WALK;
   if(emp) emp.start = t, seq.push(emp);
@@ -248,7 +240,6 @@ function plan(d){
   return b;
 }
 
-// ---- Рендер одного дня ----
 function dayHTML(d, pr){
   var P = plan(d), S = P.seq;
   var tot = 0, dn = 0, rem = 0, isCur = -1, h = "", num = 0;
@@ -301,8 +292,6 @@ function dayHTML(d, pr){
   });
 
   var pct = tot ? Math.round(dn / tot * 100) : 0;
-
-  // фактическое "done" пересчитаем по стейту
   var done = 0, allCount = 0;
   S.forEach(function(s){
     if(!s.tasks) return;
@@ -324,13 +313,6 @@ function dayHTML(d, pr){
   var ov = P.over ? '<div class="warn" style="margin:6px 0 0">' + L("overLimit", {t: dur(P.end - t0()), n: P.over}) + '</div>' : '';
   var dl = S.filter(function(s){ return s.room && s.tasks && s.tasks.some(function(t){ return t.type === "dr"; }); }).map(function(s){ return s.room; });
   var drb = dl.length ? '<div class="dr">' + L("drainsToday", {list: dl.join(", ")}) + '</div>' : '';
-  var pl = [];
-  S.forEach(function(s){
-    if(!s.tasks) return;
-    s.tasks.forEach(function(t){
-      if(t.per != null) pl.push(L("period") + ": " + L(t.k));
-    });
-  });
 
   var hd = '<div class="hd">' + drb + (
     pr
@@ -345,7 +327,6 @@ function dayHTML(d, pr){
   return hd + h;
 }
 
-// ---- Главный рендер ----
 function render(scroll){
   document.getElementById("h1").textContent = L("title");
   document.getElementById("sAllRooms").textContent = L("allRooms");
@@ -383,7 +364,6 @@ function render(scroll){
 
   var listEl = document.getElementById("list");
   if(cur < 5){
-    // Проверка "не вписаны"
     var allStr = st.all || "";
     var missing = [];
     if(allStr){
@@ -404,7 +384,6 @@ function render(scroll){
       : '';
     listEl.innerHTML = warnHtml + dayHTML(cur, 0);
 
-    // Reattach handlers
     var ti = document.getElementById("t0");
     if(ti) ti.onchange = function(){ st.t = ti.value; save(); render(); };
     var si = document.getElementById("sp");
@@ -461,12 +440,10 @@ function render(scroll){
   }
 }
 
-/* ---- Инициализация ---- */
 function init(){
   load();
   if(!st.fs){ st.fs = dk(0); save(); }
   cur = today();
-  // Чистим старые галочки (> 14 дней)
   var cutoff = new Date(); cutoff.setDate(cutoff.getDate() - 14);
   var cutKey = cutoff.getFullYear()+"-"+("0"+(cutoff.getMonth()+1)).slice(-2)+"-"+("0"+cutoff.getDate()).slice(-2);
   Object.keys(st.c).forEach(function(k){
@@ -539,7 +516,6 @@ function init(){
   render();
 }
 
-/* PWA: регистрируем только если запущено по http(s) */
 if("serviceWorker" in navigator && location.protocol.indexOf("http") === 0){
   navigator.serviceWorker.register("sw.js").catch(function(){});
 }
