@@ -283,7 +283,7 @@ function dayHTML(d, pr){
         return '<label class="t' + (checked ? ' done' : '') + '">' +
           '<input type="checkbox" data-day="' + key + '" data-stop="' + s.id + '" data-i="' + k + '"' + extra + (checked ? ' checked' : '') + '>' +
           '<span>' + (t.rag === "r" ? '<i class="dot" style="background:var(--red);display:inline-block;width:10px;height:10px;margin-right:6px"></i>' : '') +
-          t.k + '<em>≈' + t.m + ' ' + L("m") + '</em></span></label>';
+          L(t.k) + '<em>≈' + t.m + ' ' + L("m") + '</em></span></label>';
       }).join("");
     }
     var fin = !pr && s.tasks && s.tasks.length && !s.left;
